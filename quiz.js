@@ -3,15 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const answerElement = document.getElementById('answer');
     const submitButton = document.getElementById('submit');
     const evaluationElement = document.getElementById('evaluation');
-    const retryButton = document.getElementById('retry'); // 获取重新出题按钮
+    const retryButton = document.getElementById('retry');
 
-    // 重新出题函数
+    let currentQuestion = '';
+
     function getNewQuestion() {
-        // 清空答案和评价
         answerElement.value = '';
         evaluationElement.textContent = '';
 
-        // 从智谱AI获取问题
         axios.post('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
             model: "glm-4",
             messages: [
@@ -23,8 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
        .then(response => {
-            const question = response.data.choices[0].message.content;
-            questionElement.textContent = question;
+            currentQuestion = response.data.choices[0].message.content;
+            questionElement.textContent = currentQuestion;
         })
        .catch(error => {
             console.error('获取题目失败:', error);
@@ -32,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 初始加载时获取问题
     getNewQuestion();
 
     submitButton.addEventListener('click', () => {
@@ -42,11 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 从智谱AI获取评价
         axios.post('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
             model: "glm-4",
             messages: [
-                { "role": "user", "content": `请评价以下关于毛泽东思想的答案：${userAnswer}` }
+                { "role": "user", "content": `题目：${currentQuestion}，答案：${userAnswer}，请评价这个答案` }
             ]
         }, {
             headers: {
@@ -63,6 +60,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 重新出题按钮点击事件
     retryButton.addEventListener('click', getNewQuestion);
 });

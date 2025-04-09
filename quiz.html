@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>毛概学习网站</title>
+    <title>智能出题</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="quiz.js" defer></script>
 </head>
 <body>
     <header>
@@ -18,9 +20,13 @@
     </header>
 
     <main>
-        <section class="home">
-            <h1>欢迎来到毛概学习网站</h1>
-            <p>在这里，你可以学习毛泽东思想和中国特色社会主义理论体系的重要内容，还可以通过智能出题功能进行自我测试。</p>
+        <section>
+            <h1>智能出题</h1>
+            <p>请回答以下问题：</p>
+            <div id="question"></div>
+            <input type="text" id="answer" placeholder="请输入你的答案">
+            <button id="submit">提交答案</button>
+            <div id="evaluation"></div>
         </section>
     </main>
 
